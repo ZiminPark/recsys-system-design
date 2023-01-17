@@ -1,12 +1,9 @@
-PYTHON=3.8
+PYTHON=3.9
 BASENAME=$(shell basename $(CURDIR))
-CONDA_CH=conda-forge defaults
 
-env:
-	conda create -n $(BASENAME)  python=$(PYTHON)
+.PHONY: backend streamlit
 
 setup:
-	conda install --file requirements.txt $(addprefix -c ,$(CONDA_CH))
 	pre-commit install
 
 format:
@@ -14,10 +11,17 @@ format:
 	isort .
 
 lint:
-	pytest src --flake8 --pylint --mypy
+	pytest backend --flake8 --mypy
+	pytest streamlit --flake8 --mypy
 
 utest:
 	PYTHONPATH=src pytest test/utest --cov=src --cov-report=html --cov-report=term --cov-config=setup.cfg
 
 cov:
 	open htmlcov/index.html
+
+backend:
+	python3 backend/main.py
+
+streamlit:
+	streamlit run streamlit/demo.py

@@ -1,3 +1,6 @@
+## Explanation
+checkout https://zimmy.gitbook.io/rec/
+
 ## File Structure
 ```bash
 .
@@ -6,14 +9,14 @@
 ├── README.md
 ├── requirements.txt  # package information
 ├── setup.cfg         # configurations for formatting & linting & unit-test
-├── src               # source code location
+├── backend           # source code for backend location
+├── streamlit         # source code for streamlit instead of frontend  
 └── test
     └── utest         # unit tests location
 ```
 
 ## Commands
 ```bash
-$ make env      # create anaconda environment
 $ make setup    # initial setup for the project
 $ make format   # format python scripts
 $ make lint     # lint python scripts

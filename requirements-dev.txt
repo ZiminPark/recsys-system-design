@@ -6,7 +6,7 @@ black == 22.1.0                 # coding style
 
 # linter
 pylint              == 2.12.2   # python static code analysis
-mypy                == 0.931    # type check
+mypy                == 0.991    # type check
 flake8              == 3.8.4    # PyFlakes + pycodestyle + Ned Batchelder’s McCabe script
 flake8-docstrings   == 1.6.0    # pydocstyle tool to flake8
 flake8-annotations  == 2.7.0    # PEP 3107-style function annotations
