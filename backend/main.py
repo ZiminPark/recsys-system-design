@@ -14,10 +14,12 @@ class User(BaseModel):
 
     @property
     def category(self) -> str:
-        if self.age < 5:
+        if self.age < 10:
             return "kid"
+        elif self.age < 20:
+            return "teenage"
         else:
-            return "child"
+            return "adult"
 
 
 app = FastAPI()
@@ -25,10 +27,7 @@ app = FastAPI()
 
 @app.post("/recommend")
 def recommend(req: RecommenderRequest) -> Dict[str, str]:
-    mp = {
-        "kid": "Toy",
-        "child": "Book",
-    }
+    mp = {"kid": "Toy", "teenage": "Book", "adult": "Car"}
     user = User(age=req.age)
     item = mp.get(user.category, "No Item is recommended.")
 
