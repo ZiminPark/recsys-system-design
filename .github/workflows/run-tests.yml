@@ -18,7 +18,8 @@ jobs:
     - name: Install dependencies
       run: |
         pip3 install --upgrade pip
-        if [ -f requirements-dev.txt ]; then pip3 install -r requirements-dev.txt; fi
+        pip3 install -r requirements-dev.txt
+        mypy --install-types
 
     - run: make format
     - run: make lint
