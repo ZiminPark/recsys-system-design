@@ -36,6 +36,14 @@ def recommend(req: RecommenderRequest) -> Dict[str, str]:
 
 
 if __name__ == "__main__":
-    import uvicorn
+    import os
 
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+    import uvicorn
+    from dotenv import load_dotenv
+
+    load_dotenv()
+
+    host = os.environ["BACKEND_HOST"]
+    port = int(os.environ["BACKEND_PORT"])
+
+    uvicorn.run("main:app", host=host, port=port, reload=True)
