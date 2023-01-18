@@ -1,6 +1,6 @@
 import os
 
-import requests  # type: ignore
+import requests
 from dotenv import load_dotenv
 
 import streamlit as st
@@ -16,6 +16,7 @@ def get_url() -> str:
 
 load_dotenv()
 backend_url = get_url()
+
 
 user_id = st.number_input("User ID", min_value=0, max_value=100, value=10)
 age = st.number_input("Age", min_value=0, max_value=100, value=10)
