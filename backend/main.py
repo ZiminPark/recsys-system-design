@@ -43,6 +43,12 @@ def recommend(req: RecommenderRequest) -> Dict[str, Any]:
     return {"category": user.category, "item": item, "age": age}
 
 
+@app.post("/click")
+def click(req: RecommenderRequest) -> Dict[str, Any]:
+    num_click = r.incr(f"event:userId:{req.user_id}:click")
+    return {"num_click": num_click}
+
+
 if __name__ == "__main__":
     import uvicorn
 

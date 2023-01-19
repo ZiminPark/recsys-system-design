@@ -1,10 +1,13 @@
 import os
+from logging import getLogger
 
 import requests
 from dotenv import load_dotenv
 from redis import Redis
 
 import streamlit as st
+
+logger = getLogger(__name__)
 
 
 def get_url() -> str:
@@ -13,6 +16,14 @@ def get_url() -> str:
 
     backend_url = f"{BACKEND_HOST}:{PORT}"
     return backend_url
+
+
+def post_click_event(user_id: int, item: str):
+    body = requests.api.post(
+        f"http://{backend_url}/click", json={"user_id": user_id, "item_id": item}
+    ).json()
+    logger.info(f"Click cnt: {body['num_click']}")
+    return body["num_click"]
 
 
 load_dotenv()
@@ -28,4 +39,10 @@ if st.checkbox("Show response for selected user"):
         f"http://{backend_url}/recommend", json={"user_id": user_id}
     )
     st.text(f"User ID: {user_id}")
-    st.json(res.json())
+
+    body = res.json()
+    st.json(body)
+
+    if st.button("Like?"):
+        num_click = post_click_event(int(user_id), body["item"])
+        st.text(f"user {user_id} click {body['item']} {num_click} times")
