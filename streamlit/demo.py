@@ -24,10 +24,8 @@ user_id = st.number_input("userId", min_value=0, max_value=100, step=1)
 
 
 if st.checkbox("Show response for selected user"):
-    age = r.get(f"sample:feature:userId:{user_id}:age").decode("utf-8")
     res = requests.api.post(
-        f"{backend_url}/recommend", json={"user_id": user_id, "age": age}
+        f"http://{backend_url}/recommend", json={"user_id": user_id}
     )
     st.text(f"User ID: {user_id}")
-    st.text(f"Age: {age}")
     st.json(res.json())

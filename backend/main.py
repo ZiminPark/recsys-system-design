@@ -1,15 +1,26 @@
-from typing import Dict
+import os
+from dataclasses import dataclass
+from typing import Any, Dict
 
+from dotenv import load_dotenv
 from fastapi import FastAPI
 from pydantic import BaseModel
+from redis import Redis
+
+load_dotenv()
+
+
+r = Redis(host=os.environ["REDIS_ADDRESS"], port=int(os.environ["REDIS_PORT"]))
+app = FastAPI()
 
 
 class RecommenderRequest(BaseModel):
     user_id: int
-    age: int
 
 
-class User(BaseModel):
+@dataclass
+class User:
+    _id: int
     age: int
 
     @property
@@ -22,27 +33,19 @@ class User(BaseModel):
             return "adult"
 
 
-app = FastAPI()
-
-
 @app.post("/recommend")
-def recommend(req: RecommenderRequest) -> Dict[str, str]:
+def recommend(req: RecommenderRequest) -> Dict[str, Any]:
     mp = {"kid": "Toy", "teenage": "Book", "adult": "Car"}
-    user = User(age=req.age)
+    age = r.get(f"sample:feature:userId:{req.user_id}:age").decode("utf-8")
+    user = User(req.user_id, int(age))
     item = mp.get(user.category, "No Item is recommended.")
 
-    return {"category": user.category, "item": item}
+    return {"category": user.category, "item": item, "age": age}
 
 
 if __name__ == "__main__":
-    import os
-
     import uvicorn
-    from dotenv import load_dotenv
 
-    load_dotenv()
-
-    host = os.environ["BACKEND_HOST"]
-    port = int(os.environ["BACKEND_PORT"])
-
+    host = os.getenv("BACKEND_HOST", "localhost")
+    port = int(os.getenv("BACKEND_PORT", 8000))
     uvicorn.run("main:app", host=host, port=port, reload=True)

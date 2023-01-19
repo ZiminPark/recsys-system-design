@@ -25,3 +25,6 @@ backend:
 
 streamlit:
 	streamlit run streamlit/demo.py
+
+redis:
+	redis-server --port 6379
